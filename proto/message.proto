@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package message;
+
+message ClientKey { bytes client_pub_key = 1; }
+message DummyMessage { bytes msg = 1; }
+
+message ServerKey { bytes server_pub_key = 1; }
+
+message Request {
+  oneof request {
+    ClientKey client_key = 1;
+    DummyMessage msg = 2;
+  }
+}
+
+message Response {
+  oneof response {
+    ServerKey server_key = 1;
+    DummyMessage msg = 2;
+  }
+}
