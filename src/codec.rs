@@ -1,6 +1,6 @@
 pub mod server {
     use crate::message::{Request, Response};
-    use bytes::{Buf, BufMut};
+    use bytes::BufMut;
     use prost::Message;
     use tokio_util::codec;
     /// server custom codec

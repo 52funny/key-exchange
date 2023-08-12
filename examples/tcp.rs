@@ -63,16 +63,19 @@ impl codec::Decoder for RstRespCodec {
             return Ok(None);
         }
 
-        let data_len = src.get_u32() as usize;
+        let mut length_bytes = [0u8; 4];
+        src.copy_to_slice(&mut length_bytes[..4]);
+        let data_len = u32::from_be_bytes(length_bytes) as usize;
 
-        if buf_len < data_len {
+        let framed_length = 4 + data_len;
+        if buf_len < framed_length {
             info!("reserve {} bytes", data_len - buf_len);
-            src.reserve(data_len - buf_len);
+            src.reserve(framed_length - buf_len);
             return Ok(None);
         }
-        let frame_bytes = src.split_to(data_len);
+        let frame_bytes = src.split_to(framed_length);
         // let s = src.to_vec();
-        match bincode::deserialize::<RstResp>(&frame_bytes) {
+        match bincode::deserialize::<RstResp>(&frame_bytes[4..]) {
             Ok(frame) => Ok(Some(frame)),
             Err(e) => Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
         }

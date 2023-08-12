@@ -64,8 +64,7 @@ async fn main() -> Result<()> {
                     response::Response::Msg(msg) => {
                         let secret = STORE.get(&addr).unwrap();
                         let t = secret.as_bytes().as_slice();
-                        let key =
-                            ring::aead::UnboundKey::new(&ring::aead::AES_256_GCM, &t).unwrap();
+                        let key = ring::aead::UnboundKey::new(&ring::aead::AES_256_GCM, t).unwrap();
                         let nonce =
                             ring::aead::Nonce::assume_unique_for_key([0u8; ring::aead::NONCE_LEN]);
                         let k = ring::aead::LessSafeKey::new(key);
@@ -88,7 +87,7 @@ async fn main() -> Result<()> {
     rw.recv().await.unwrap();
     let secret = STORE.get(&addr).unwrap();
     let t = secret.as_bytes().as_slice();
-    let key = ring::aead::UnboundKey::new(&ring::aead::AES_256_GCM, &t).unwrap();
+    let key = ring::aead::UnboundKey::new(&ring::aead::AES_256_GCM, t).unwrap();
     let k = ring::aead::LessSafeKey::new(key);
 
     loop {

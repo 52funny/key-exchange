@@ -64,7 +64,7 @@ async fn handle_request(req: Request, addr: &SocketAddr) -> Result<Response> {
                 // construct key
                 let secret = STORE.get(&addr.ip()).unwrap();
                 let t = secret.as_bytes().as_slice();
-                let key = UnboundKey::new(&ring::aead::AES_256_GCM, &t).unwrap();
+                let key = UnboundKey::new(&ring::aead::AES_256_GCM, t).unwrap();
                 let nonce = Nonce::assume_unique_for_key([0u8; ring::aead::NONCE_LEN]);
                 let k = LessSafeKey::new(key);
 
