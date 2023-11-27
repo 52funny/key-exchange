@@ -1,14 +1,18 @@
 use anyhow::Result;
 use dashmap::DashMap;
 use futures::prelude::*;
-use key_exchange::codec::server::ServerCodec;
-use key_exchange::message::{request, Request, Response};
+use key_exchange::{
+    codec::server::ServerCodec,
+    message::{request, Request, Response},
+};
 use lazy_static::lazy_static;
 use p256::ecdh::SharedSecret;
 use rand_core::OsRng;
 use ring::aead::{Aad, LessSafeKey, Nonce, UnboundKey};
-use std::net::{IpAddr, SocketAddr};
-use std::ops::Deref;
+use std::{
+    net::{IpAddr, SocketAddr},
+    ops::Deref,
+};
 use tokio::net::TcpListener;
 use tokio_util::codec::Framed;
 use tracing::{debug, info};
